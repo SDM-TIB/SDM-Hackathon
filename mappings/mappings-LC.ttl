@@ -1,0 +1,213 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix schema: <http://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix lungCancer: <http://example.org/lungCancer/entity/> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@base <http://example.org/lungCancer/entity/> .
+
+
+<Patient_Gender>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source <RDB_source>;
+    rr:sqlVersion rr:SQL2008;
+    rml:query """SELECT * FROM Patient""";
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasGender;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{sexo}";
+    ]
+  ].
+
+<Patient_Age>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source <RDB_source>;
+    rr:sqlVersion rr:SQL2008;
+    rml:query """SELECT * FROM PatientAge""";
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasAgeCategory;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{ageCategory}";
+    ]
+  ].
+
+<Patient_Stage>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source <RDB_source>;
+    rr:sqlVersion rr:SQL2008;
+    rml:query """SELECT medicalrecord_diagnosis, estadioini, histologia_CUI FROM Diagnosis""";
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord_diagnosis}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasStage;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{estadioini}";
+    ]
+  ].
+
+<SmokingHabit>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source <RDB_source>;
+    rr:sqlVersion rr:SQL2008;
+    rml:query """SELECT medicalrecord_smokerinfo, habitotab FROM `Smoker_information` WHERE habitotab!='UnKnown'""";
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord_smokerinfo}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasSmokingHabit;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{habitotab}";
+    ]
+  ].
+
+<Biomarker_Positive>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source <RDB_source>;
+    rr:sqlVersion rr:SQL2008;
+    rml:query """SELECT DISTINCT t1.medicalrecord_marker, t2.marmolre FROM `Diagnosis_markers` t1, Molecular_markers t2 WHERE t1.ID_marker = t2.ID_marker AND t2.bioStatus = 1""";
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord_marker}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasBiomarker;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{marmolre}_Positive";
+    ]
+  ].
+
+<Biomarker_Negative>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source <RDB_source>;
+    rr:sqlVersion rr:SQL2008;
+    rml:query """SELECT DISTINCT t1.medicalrecord_marker, t2.marmolre FROM `Diagnosis_markers` t1, Molecular_markers t2 WHERE t1.ID_marker = t2.ID_marker AND t2.bioStatus = 0""";
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord_marker}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasBiomarker;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{marmolre}_Negative";
+    ]
+  ].
+
+<Relapse_Progression>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source <RDB_source>;
+    rr:sqlVersion rr:SQL2008;
+    rml:query """SELECT medicalrecord_relapse, recaida FROM Cancer_relapse WHERE recaida!='UnKnown'""";
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord_relapse}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasRelapse_Progression;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{recaida}";
+    ]
+  ].
+
+<Patient_Drug_Treatment>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source <RDB_source>;
+    rr:sqlVersion rr:SQL2008;
+    rml:query """SELECT * FROM Patient_CT_drugENG""";
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:patientDrug;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{drugName1}";
+    ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:patientDrug;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{drugName2}";
+    ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:patientDrug;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{drugName3}";
+    ]
+  ].
+
+<TreatmentType_CT>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source <RDB_source>;
+    rr:sqlVersion rr:SQL2008;
+    rml:query """SELECT * FROM Patient_CT_translated""";
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:treatmentType;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{chemothrapyLabelEN}";
+    ]
+  ].
+
+<TreatmentType_RT>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source <RDB_source>;
+    rr:sqlVersion rr:SQL2008;
+    rml:query """SELECT * FROM Patient_RT_area_translated""";
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:treatmentType;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{Radiotherapy_area}";
+    ]
+  ].
+
+<TreatmentType_Surgery>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source <RDB_source>;
+    rr:sqlVersion rr:SQL2008;
+    rml:query """SELECT * FROM Patient_surgery_translated""";
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:treatmentType;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{surgeryLabel}";
+    ]
+  ].
+
