@@ -15,9 +15,8 @@
 <Patient_Gender>
   a rr:TriplesMap;
   rml:logicalSource [
-    rml:source <RDB_source>;
-    rr:sqlVersion rr:SQL2008;
-    rml:query """SELECT * FROM Patient""";
+    rml:source "../datasets/Patient.csv" ;
+    rml:referenceFormulation ql:CSV
   ];
   rr:subjectMap [
     rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
@@ -32,9 +31,8 @@
 <Patient_Age>
   a rr:TriplesMap;
   rml:logicalSource [
-    rml:source <RDB_source>;
-    rr:sqlVersion rr:SQL2008;
-    rml:query """SELECT * FROM PatientAge""";
+    rml:source "../datasets/PatientAge.csv" ;
+    rml:referenceFormulation ql:CSV
   ];
   rr:subjectMap [
     rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
@@ -49,9 +47,8 @@
 <Patient_Stage>
   a rr:TriplesMap;
   rml:logicalSource [
-    rml:source <RDB_source>;
-    rr:sqlVersion rr:SQL2008;
-    rml:query """SELECT medicalrecord_diagnosis, estadioini, histologia_CUI FROM Diagnosis""";
+    rml:source "../datasets/Diagnosis.csv" ;
+    rml:referenceFormulation ql:CSV
   ];
   rr:subjectMap [
     rr:template "http://example.org/lungCancer/entity/{medicalrecord_diagnosis}_Patient";
@@ -66,9 +63,8 @@
 <SmokingHabit>
   a rr:TriplesMap;
   rml:logicalSource [
-    rml:source <RDB_source>;
-    rr:sqlVersion rr:SQL2008;
-    rml:query """SELECT medicalrecord_smokerinfo, habitotab FROM `Smoker_information` WHERE habitotab!='UnKnown'""";
+    rml:source "../datasets/Smoker_information.csv" ;
+    rml:referenceFormulation ql:CSV
   ];
   rr:subjectMap [
     rr:template "http://example.org/lungCancer/entity/{medicalrecord_smokerinfo}_Patient";
@@ -83,9 +79,8 @@
 <Biomarker_Positive>
   a rr:TriplesMap;
   rml:logicalSource [
-    rml:source <RDB_source>;
-    rr:sqlVersion rr:SQL2008;
-    rml:query """SELECT DISTINCT t1.medicalrecord_marker, t2.marmolre FROM `Diagnosis_markers` t1, Molecular_markers t2 WHERE t1.ID_marker = t2.ID_marker AND t2.bioStatus = 1""";
+    rml:source "../datasets/Biomaker_Positive.csv" ;
+    rml:referenceFormulation ql:CSV
   ];
   rr:subjectMap [
     rr:template "http://example.org/lungCancer/entity/{medicalrecord_marker}_Patient";
@@ -100,9 +95,8 @@
 <Biomarker_Negative>
   a rr:TriplesMap;
   rml:logicalSource [
-    rml:source <RDB_source>;
-    rr:sqlVersion rr:SQL2008;
-    rml:query """SELECT DISTINCT t1.medicalrecord_marker, t2.marmolre FROM `Diagnosis_markers` t1, Molecular_markers t2 WHERE t1.ID_marker = t2.ID_marker AND t2.bioStatus = 0""";
+    rml:source "../datasets/Biomaker_Negative.csv" ;
+    rml:referenceFormulation ql:CSV
   ];
   rr:subjectMap [
     rr:template "http://example.org/lungCancer/entity/{medicalrecord_marker}_Patient";
@@ -117,9 +111,8 @@
 <Relapse_Progression>
   a rr:TriplesMap;
   rml:logicalSource [
-    rml:source <RDB_source>;
-    rr:sqlVersion rr:SQL2008;
-    rml:query """SELECT medicalrecord_relapse, recaida FROM Cancer_relapse WHERE recaida!='UnKnown'""";
+    rml:source "../datasets/Cancer_relapse.csv" ;
+    rml:referenceFormulation ql:CSV
   ];
   rr:subjectMap [
     rr:template "http://example.org/lungCancer/entity/{medicalrecord_relapse}_Patient";
@@ -134,9 +127,8 @@
 <Patient_Drug_Treatment>
   a rr:TriplesMap;
   rml:logicalSource [
-    rml:source <RDB_source>;
-    rr:sqlVersion rr:SQL2008;
-    rml:query """SELECT * FROM Patient_CT_drugENG""";
+    rml:source "../datasets/Patient_CT_drugENG.csv" ;
+    rml:referenceFormulation ql:CSV
   ];
   rr:subjectMap [
     rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
@@ -163,9 +155,8 @@
 <TreatmentType_CT>
   a rr:TriplesMap;
   rml:logicalSource [
-    rml:source <RDB_source>;
-    rr:sqlVersion rr:SQL2008;
-    rml:query """SELECT * FROM Patient_CT_translated""";
+    rml:source "../datasets/Patient_CT_translated.csv" ;
+    rml:referenceFormulation ql:CSV
   ];
   rr:subjectMap [
     rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
@@ -180,9 +171,8 @@
 <TreatmentType_RT>
   a rr:TriplesMap;
   rml:logicalSource [
-    rml:source <RDB_source>;
-    rr:sqlVersion rr:SQL2008;
-    rml:query """SELECT * FROM Patient_RT_area_translated""";
+    rml:source "../datasets/Patient_RT_area_translated.csv" ;
+    rml:referenceFormulation ql:CSV
   ];
   rr:subjectMap [
     rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
@@ -197,9 +187,8 @@
 <TreatmentType_Surgery>
   a rr:TriplesMap;
   rml:logicalSource [
-    rml:source <RDB_source>;
-    rr:sqlVersion rr:SQL2008;
-    rml:query """SELECT * FROM Patient_surgery_translated""";
+    rml:source "../datasets/Patient_surgery_translated.csv" ;
+    rml:referenceFormulation ql:CSV
   ];
   rr:subjectMap [
     rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
