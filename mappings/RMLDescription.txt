@@ -1,0 +1,57 @@
+The RDF Mapping Language (RML) is an extension of R2RML to enable the definition of data sources in various formats, i.e., XML, JSON, CSV, and relational tables. RML is expressed in RDF.
+
+The RML vocabulary namespace is http://semweb.mmlab.be/ns/rml#
+
+http://semweb.mmlab.be/ns/rml#
+The RML vocabulary preferred prefix is the rml.
+
+An RML mapping defines a mapping from any data in a structured source format to RDF. It consists of one or more triples maps.
+
+The input to an RML mapping is called input data source. The output of an RML mapping is called output dataset.
+
+The output dataset of an RML mapping is an RDF dataset that contains the generated RDF triples for each of the triples maps of the RML mapping. RML processors may provide additional triples or graphs.
+
+The RML vocabulary consists of the RML specific defined classes but also includes all the [R2RML] classes:
+
+rr:TriplesMap is the class of triples maps as defined by R2RML.
+rml:LogicalSource is the class of logical sources.
+rml:BaseSource is the class of data sources used as input source. R2RML's rr:BaseTableOrView is a subclass of rml:BaseSource
+rr:TermMap is the class of term maps, as defined by R2RML. It has four subclasses:
+rr:SubjectMap is the class of subject maps.
+rr:PredicateMap is the class of predicate maps.
+rr:ObjectMap is the class of object maps.
+rr:GraphMap is the class of graph maps.
+rml:LanguageMap is the class of language maps.
+rr:PredicateObjectMap is the class of predicate-object maps.
+rr:RefObjectMap is the class of referencing object maps.
+rr:Join is the class of join conditions.
+rml:referenceFormulation is the class of supported reference formulations.
+An RML mapping, defines a mapping from any logical source to RDF. It is a structure that consists of one or more triples maps.
+Example of triples maps collecting data from a CSV file:
+
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ex: <http://example.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ql <http://semweb.mmlab.be/ns/ql#> .
+<TriplesMapDrug>
+    rml:logicalSource [ rml:source "Drug.csv";
+                                  rml:referenceFormulation ql:CSV];
+	rr:subjectMap [rr:template "http://example.org/Drug/{drugBankID}";
+                                rr:class ex:Drug];
+        rr:predicateObjectMap [
+		rr:predicate ex:drugName;
+		rr:objectMap [
+			rr:template "http://example.org/Drug/{DrugName}"; ]];
+        rr:predicateObjectMap [
+   		rr:predicate ex:hasDBId;
+		rr:objectMap [
+			rr:template "http://example.org/Drug/{drugBankID}";]];
+	rr:predicateObjectMap [
+		rr:predicate ex:bioavailability;
+		rr:objectMap [
+			rml:reference "Bioavailability"; rr:datatype xsd:float]];
+        rr:predicateObjectMap [
+		rr:predicate ex:casNumber;
+		rr:objectMap [rml:reference "casNumber"; rr:datatype xsd:string]].
+
