@@ -1,0 +1,33 @@
+#Description of SPARQL
+
+<Select-From-Where-Query> := [<Namespaces>]
+SELECT <Projected_variables>
+[FROM <RDF_dataset>]*
+WHERE <Graph_pattern_filter>
+[MODIFIERS]
+<Namespaces>:= PREFIX <name>: <URL>  
+<Namespaces>:= <Namespaces> <Namespaces>
+
+<Projected_variables>:= <DISTINCT> <List_vars>
+<DISTINCT>:= Empty| DISTINCT
+<List_vars>:= <Vars> | *
+<Vars> := <Var> 
+<Vars> := <Vars> <Vars>
+
+<Graph_pattern_filter>:= {<Graph_pattern>}. <Filter>
+<Filter>:= Empty
+<Filter>:= FILTER(<Built-in_Conditions>) <Filter>
+
+<Graph_pattern>:= {<Graph_pattern>}
+<Graph_pattern>:= 
+   <Graph_pattern> OPTIONAL <Graph_pattern>
+<Graph_pattern>:= 
+   <Graph_pattern> UNION <Graph_pattern>
+<Graph_pattern>:= 
+   <Graph_pattern> . <Graph_pattern>
+<Graph_pattern>:= <Triple_pattern>
+
+[MODIFIERS]:= GROUP BY <List_vars> | 
+                          ORDER BY <List_vars> |
+                          ORDER BY DESC(<List_vars>) |
+                          ORDER BY ASC(<List_vars>) 

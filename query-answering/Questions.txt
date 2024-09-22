@@ -1,0 +1,14 @@
+Question 1:
+What is the frequency of the smoking habits based on the genetic mutation (biomarkers) in the LC patients ?
+
+Question 2:
+What is the frequency of age categories based on the gender of the LC patients?
+
+Question 3:
+What is the frequency of the genetic mutations (biomarkers) based on the age category, smoking habits and gender of the LC patients?
+
+Question 4:
+What is the frequency of the smoking habits and age category of the LC patients who receive or not the drug Nivolumab?
+
+Question 5:
+What is the frequency of the LC patients who receive or not the drug Nivolumab according to their smoking habits and age category? 
