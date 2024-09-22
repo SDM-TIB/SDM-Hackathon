@@ -1,0 +1,83 @@
+Definition 1:  A shape ϕ is defined as:
+ϕ::= ⟙  true
+| 𝜟N  node belongs to the set of nodes N
+| 𝜳 cond  node satisfies the Boolean condition cond
+| ϕ1∧ϕ2 conjunction of shape ϕ1 and shape ϕ2
+| ¬ϕ negation of shape ϕ
+| @s reference to shape with label s
+| →p ϕ {min,max} between min and max outward edges (inclusive) with label p to nodes satisfying ϕ
+
+Definition 2:  A shape schema is defined as a tuple
+𝚺=(𝜱,S,𝛌), where:
+𝜱 is a set of shapes
+S a set of shape labels
+𝛌: S → 𝜱 is a total function from labels to shapes.
+
+Example of Shape Schema:
+𝚺=(𝜱,S,𝛌)
+𝜱={→ex:name string {1,1} ,
+       →ex:title string {1,1} ∧
+       →ex:year date {1,1} ∧
+       →ex:hasAuthor  exS:Author {1,*} }
+S={exS:Author,exS:Paper}
+𝛌(exS:Author)=→ex:name string {1,1}
+𝛌(exS:Paper)=→ex:title string {1,1} ∧
+                       →ex:year date {1,1} ∧
+                            →ex:hasAuthor  exS:Author {1,*} 
+Definition 3:  Given a directed edge-labelled graph G=(V,E,L) and a shapes schema  𝚺=(𝜱,S,𝛌), a shapes map is a (partial) mapping 
+𝛔: V x S → {0,1} 
+
+The shapes map 𝛔 is a way of labelling the nodes of G with the labels of shapes in S. 
+𝛔(v,s)=1, then node v is labelled with s
+otherwise, 𝛔(v,s)=0
+
+Definition 4:  Given a shapes schema  𝚺=(𝜱,S,𝛌) and a directed edge-labelled graph G=(V,E,L), a node v ∈ V, and a total shapes map 𝛔. 
+The shape evaluation function [ϕ]G,v,𝛔 ∈ {0,1} is defined as follows:
+-) [⟙]G,v,𝛔  =1
+-) [𝜟N ]G,v,𝛔  =1 iff  v ∈ N 
+-) [𝜳 cond]G,v,𝛔  =1 iff cond(v) is true  
+-) [ϕ1∧ϕ2]G,v,𝛔  = min{[ϕ1]G,v,𝛔,[ϕ2]G,v,𝛔 } 
+-) [¬ϕ]G,v,𝛔  = 1 -  [ϕ]G,v,𝛔 
+-) [@s]G,v,𝛔  = 1 iff 𝛔(v,s)=1
+-) [→p ϕ {min,max}]G,v,𝛔  = 1 iff 
+-) min ≤ |{(v,p,u) ∈ E | [ϕ]G,v,𝛔 =1 } |≤ max
+If [ϕ]G,v,𝛔 =1, then v is said to satisfy ϕ in G under 𝛔.
+
+Definition 5. Given a shapes schema  𝚺=(𝜱,S,𝛌) and a directed edge-labelled graph G=(V,E,L).
+A shapes target T ⊆ V x S is a set of pairs of nodes and shape labels from G and 𝚺, respectively.
+
+Definition 6. Given a shapes schema  𝚺=(𝜱,S,𝛌) and a directed edge-labelled graph G=(V,E,L), and a shapes target T. 
+G is valid under 𝚺 and T iff:
+-) there exists a shapes map 𝛔, such that, 
+  for all s ∈ S and v ∈ V it holds that 𝛔(v,s)= [𝛌(s)]G,v,𝛔(v,s) ∈ T implies 𝛔(v,s)=1
+
+
+SHACL: W3C recommendation language for the declarative specification of integrity constraints over RDF KGs.
+A SHACL shape: 
+-) represents a set of constraints that apply over the same entities.
+-) can refer to another shape, to represent constraints between entities of two types.
+
+Namespaces in SHACL
+@prefix exS: <http://example.org/shapes> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+A generic definition of a “Node Shape”:
+exS:YourShape a sh:NodeShape ;
+       sh:targetClass ex:CLASS ;
+       sh:property [
+       sh:path ex:ATTRIBUTE ; 
+       sh:datatype xsd:TYPE ; 
+       sh:node exS:SHAPE ;
+       sh:minCount Min ; 
+       sh:maxCount Max].
+
+In a “Node Shape”:
+-) sh:targetClass defines the target node.
+-) sh:property states the property over which the constraint is defined.
+-) sh:path declares the path that goes from focus node to the values that they describe. Usually this is the IRI of a property.
+-) sh:datatype declares the datatype.
+-) sh:node declares the shape to be checked for the object entities of an object property.
+-) sh:minCount estates the min cardinality.
+-) sh:maxCount estates the max cardinality
