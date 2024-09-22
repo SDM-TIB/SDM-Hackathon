@@ -1,5 +1,3 @@
-Prompt with all the information about the properties in the KG.
-# CONTEXT #
 Properties of lung cancer `Patient` class, within a knowledge graph, 
 with metadata describing their human-understandable label (`rdfs:label`), human-understandable meaning (`rdfs:comment`), domain (`rdfs:domain`), and range (`rdfs:range`):
 

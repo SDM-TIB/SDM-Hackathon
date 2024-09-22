@@ -1,0 +1,46 @@
+Properties of lung cancer `Patient` class, within a knowledge graph, 
+with metadata describing their human-understandable label (`rdfs:label`), human-understandable meaning (`rdfs:comment`), domain (`rdfs:domain`), and range (`rdfs:range`):
+
+1. Property: `http://example.org/lungCancer/entity/hasBiomarker`
+   - `rdfs:label`: "biomarker test result"
+   - `rdfs:comment`: "The biomarker test results of lung cancer patients, including ALK or EGFR; 'other biomarker' includes MET, HER2, FGFR1, KRAS, RET, PDL1, HER2Mut, ROS1, BRAF."
+   - `rdfs:domain`: `LC:Patient`
+   - `rdfs:range`: `xsd:string`
+
+2.  Property: `http://example.org/lungCancer/entity/patientDrug_<DrugName>`  
+- `rdfs:label`: "Type of Lung cancer treatment"
+   - `rdfs:comment`: <DrugName> corresponds to one of the drugs from the list "Nivolumab", "Cisplatin", "Docetaxel", "Doxorubicin", "Afatinib", "Paclitaxel", "Carboplatin", "Pemetrexed"
+   - `rdfs:domain`: `LC:Patient`
+   - `rdfs:range`: `xsd:string`
+
+3.  Property: `http://example.org/lungCancer/entity/patientDrug_No<DrugName>`  
+- `rdfs:label`: "Type of Lung cancer treatment"
+   - `rdfs:comment`: <DrugName> corresponds to one of the drugs from the list "Nivolumab", "Cisplatin", "Docetaxel", "Doxorubicin", "Afatinib", "Paclitaxel", "Carboplatin", "Pemetrexed"
+   - `rdfs:domain`: `LC:Patient`
+   - `rdfs:range`: `xsd:string`
+
+4. Property: `lungCancerE:hasSmokingHabit`
+   - `rdfs:label`: "smoking habits"
+   - `rdfs:comment`: "The smoking habits of lung cancer patients, classified as 'Non-Smoker' or 'CurrentSmoker' or 'FormerSmoker'."
+   - `rdfs:domain`: `Patient`
+   - `rdfs:range`: `xsd:string`
+
+5. Property: `lungCancerE:hasAgeCategory`
+   - `rdfs:label`: "age"
+   - `rdfs:comment`: "The age of lung cancer patients, classified as 'Young' (<= 60 years) or 'Old' (> 60 years)."
+   - `rdfs:domain`: `Patient`
+   - `rdfs:range`: `xsd:integer`
+
+6. Property: `lungCancerE:hasRelapseProgression`
+   - `rdfs:label`: "Relapse or Progression status"
+   - `rdfs:comment`: "The status of lung cancer patient with the status of reoccurence of tumour cells, the status represents 
+      'Relapse' or 'Progression' or 'NoProgression'"
+   - `rdfs:domain`: `Patient`
+   - `rdfs:range`: `xsd:string`
+
+7. Property: `lungCancerE:hasStage`
+   - `rdfs:label`: "Lung cancer patient stage"
+   - `rdfs:comment`: "The family degree of NSCLC patients' antecedents with any cancer, classified as 
+      'I', 'IA','IB','IIA', 'IIB', 'IIIA','IIIB', 'IIIC', 'IV', 'IVA', 'IVB'"
+   - `rdfs:domain`: `Patient`
+   - `rdfs:range`: `xsd:string`
