@@ -1,0 +1,3 @@
+Duplicate removal: submap_8, submap_9, and submap_10
+Duplicate removal: submap_4 and submap_5
+Combine: submap_0, submap_1, submap_2, submap_3, submap_6, and submap_7
