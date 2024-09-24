@@ -1,0 +1,50 @@
+#INSTRUCTIONS#
+You have the task of creating a knowledge graph (KG) specified as RDF in .NT  (N triples) format. The input will be a data integration system DIS=<O,S,M> where O is a unified ontology, S a set of source signatures, and M is a set of mappings from the signatures of sources in S to classes and properties in O. Also, you will receive the instance of the sources in S (INSTANCE(S)) and for creating KG, you should execute the mapping rules in M over the instances in INSTANCE(S). The resulting KG will correspond to instances of classes and properties defined using rules M. The instances in INSTANCE(S) will be provided below in the tag #DATA#.
+
+#DIS#
+Data sources in
+data.csv contains information about the gender of a lung cancer patient.
+This dataset contains two columns ‘medicalrecord’ and ‘sexo’, where, column ‘medicalrecord’ represents the identifier of the patient and ‘sexo’ represents the gender of that patient.
+Ontology O:
+Class: LC:Patient each entity of this class represents a lung cancer patient
+Properties:
+ `LC:hasGender`
+   - `rdfs:label`: "gender"
+   - `rdfs:comment`: "The gender of lung cancer patients, either male or female."
+   - `rdfs:domain`: `Patient`
+   - `rdfs:range`: `xsd:string`
+
+RML Mappings
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix schema: <http://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix lungCancer: <http://example.org/lungCancer/entity/> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@base <http://example.org/lungCancer/entity/> .
+
+<Patient_Gender>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source #DATA#;
+    rml:referenceFormulation ql:CSV
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
+     rr:class lungCancer:Patient];
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasGender;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{sexo}";
+    ]
+  ].
+
+
+#OBJECTIVES#
+Execute the process described in #INSTRUCTIONS# and minimize the execution time of creating this knowledge graph (KG) while maximizing the number of generated instances in the knowledge graph  (KG).
