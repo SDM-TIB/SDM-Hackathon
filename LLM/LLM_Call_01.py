@@ -75,7 +75,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # Read the data file content
-    str_data = "#DATA#"
+    str_data = ""
     entries = os.listdir(data_file_path)
     for file in entries:
         try:
