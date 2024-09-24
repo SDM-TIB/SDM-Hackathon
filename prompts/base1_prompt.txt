@@ -1,0 +1,267 @@
+Template for Baseline1 for KG CREATION:
+#INSTRUCTIONS# 
+You have the task of creating a knowledge graph (KG) specified as RDF in .NT  (N triples) format. The input will be a data integration system DIS=<O,S,M> where O is a unified ontology, S a set of source signatures, and M is a set of mappings from the signatures of sources in S to classes and properties in O. Also, you will receive the instance of the sources in S (INSTANCE(S)) and for creating KG, you should execute the mapping rules in M over the instances in INSTANCE(S). The resulting KG will correspond to instances of classes and properties defined using rules M. The instances in INSTANCE(S) will be provided below in the tag #DATA#. 
+ 
+#DIS#
+Data sources in #DATA# contains information for the properties in the following ontology
+
+Ontology O:
+Properties:
+ 1. Property: `http://example.org/lungCancer/entity/hasBiomarker`
+   - `rdfs:label`: "biomarker test result"
+   - `rdfs:comment`: "The biomarker test results of lung cancer patients, including ALK or EGFR; 'other biomarker' includes MET, HER2, FGFR1, KRAS, RET, PDL1, HER2Mut, ROS1, BRAF."
+   - `rdfs:domain`: `Patient`
+   - `rdfs:range`: `xsd:string`
+
+2. Property: `lungCancerE:hasGender`
+   - `rdfs:label`: "gender"
+   - `rdfs:comment`: "The gender of lung cancer patients, either male or female."
+   - `rdfs:domain`: `Patient`
+   - `rdfs:range`: `xsd:string`
+
+3. Property: `lungCancerE:hasSmokingHabit`
+   - `rdfs:label`: "smoking habits"
+   - `rdfs:comment`: "The smoking habits of lung cancer patients, classified as 'Non-Smoker' or 'CurrentSmoker' or 'FormerSmoker'."
+   - `rdfs:domain`: `Patient`
+   - `rdfs:range`: `xsd:string`
+
+4. Property: `lungCancerE:hasAgeCategory`
+   - `rdfs:label`: "age"
+   - `rdfs:comment`: "The age of lung cancer patients, classified as 'Young' (<= 60 years) or 'Old' (> 60 years)."
+   - `rdfs:domain`: `Patient`
+   - `rdfs:range`: `xsd:integer`
+
+5. Property: `lungCancerE:hasRelapseProgression`
+   - `rdfs:label`: "Relapse or Progression status"
+   - `rdfs:comment`: "The status of lung cancer patient with the status of reoccurence of tumour cells, the status represents 'Relapse' or 'Progression' or 'NoProgression'"
+   - `rdfs:domain`: `Patient`
+   - `rdfs:range`: `xsd:string`
+
+6. Property: `lungCancerE:hasStage`
+   - `rdfs:label`: "Lung cancer patient stage"
+   - `rdfs:comment`: "The family degree of NSCLC patients' antecedents with any cancer, classified as 'I', 'IA','IB','IIA', 'IIB', 'IIIA', 'IIIB', 'IIIC', 'IV', 'IVA', 'IVB'"
+   - `rdfs:domain`: `Patient`
+   - `rdfs:range`: `xsd:string`
+
+7. Property: `http://example.org/lungCancer/entity/patientDrug`  
+- `rdfs:label`: "Name of drug"
+   - `rdfs:comment`: "Nivolumab", "Cisplatin", "Docetaxel", "Doxorubicin", "Afatinib", "Paclitaxel", "Carboplatin", "Pemetrexed", etc.
+   - `rdfs:domain`: `Patient`
+   - `rdfs:range`: `xsd:string`
+
+ 8. Property: `http://example.org/lungCancer/entity/treatmentType`  
+- `rdfs:label`: "Type of Lung cancer treatment"
+   - `rdfs:comment`: "Chemotherapy", "Chemoradiotherapy Adjuvant","Chemotherapy Adjuvant","Concurrent Chemoradiotherapy","Hormone Therapy","Molecular Targeted Therapy", "Neoajuvant Chemoradiotherapy","Neoadjuvant Chemotherapy", "Open Surgical Procedure","Oral Chemotherapy","Radiotherapy","Radiotherapy to Bone", "Radiotherapy to Lung", "Sequential Chemoradiation","Surgery", "Thorascopy", "Whole Brain Radiation Therapy",  etc.
+   - `rdfs:domain`: `Patient`
+   - `rdfs:range`: `Treatment`
+
+
+RML Mappings
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix schema: <http://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix lungCancer: <http://example.org/lungCancer/entity/> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@base <http://example.org/lungCancer/entity/> .
+
+
+<Patient_Gender>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "../datasets/Patient.csv" ;
+    rml:referenceFormulation ql:CSV
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasGender;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{sexo}";
+    ]
+  ].
+
+<Patient_Age>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "../datasets/PatientAge.csv" ;
+    rml:referenceFormulation ql:CSV
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasAgeCategory;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{ageCategory}";
+    ]
+  ].
+
+<Patient_Stage>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "../datasets/Diagnosis.csv" ;
+    rml:referenceFormulation ql:CSV
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord_diagnosis}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasStage;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{estadioini}";
+    ]
+  ].
+
+<SmokingHabit>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "../datasets/Smoker_information.csv" ;
+    rml:referenceFormulation ql:CSV
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord_smokerinfo}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasSmokingHabit;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{habitotab}";
+    ]
+  ].
+
+<Biomarker_Positive>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "../datasets/Biomarker_Positive.csv" ;
+    rml:referenceFormulation ql:CSV
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord_marker}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasBiomarker;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{marmolre}_Positive";
+    ]
+  ].
+
+<Biomarker_Negative>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "../datasets/Biomarker_Negative.csv" ;
+    rml:referenceFormulation ql:CSV
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord_marker}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasBiomarker;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{marmolre}_Negative";
+    ]
+  ].
+
+<Relapse_Progression>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "../datasets/Cancer_relapse.csv" ;
+    rml:referenceFormulation ql:CSV
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord_relapse}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:hasRelapse_Progression;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{recaida}";
+    ]
+  ].
+
+<Patient_Drug_Treatment>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "../datasets/Patient_CT_drugENG.csv" ;
+    rml:referenceFormulation ql:CSV
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:patientDrug;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{drugName1}";
+    ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:patientDrug;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{drugName2}";
+    ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:patientDrug;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{drugName3}";
+    ]
+  ].
+
+<TreatmentType_CT>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "../datasets/Patient_CT_translated.csv" ;
+    rml:referenceFormulation ql:CSV
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:treatmentType;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{chemothrapyLabelEN}";
+    ]
+  ].
+
+<TreatmentType_RT>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "../datasets/Patient_RT_area_translated.csv" ;
+    rml:referenceFormulation ql:CSV
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:treatmentType;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{Radiotherapy_area}";
+    ]
+  ].
+
+<TreatmentType_Surgery>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "../datasets/Patient_surgery_translated.csv" ;
+    rml:referenceFormulation ql:CSV
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/lungCancer/entity/{medicalrecord}_Patient";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate lungCancer:treatmentType;
+    rr:objectMap [
+      rr:template "http://example.org/lungCancer/entity/{surgeryLabel}";
+    ]
+  ].
+
+
+
+
+#OBJECTIVES#
+Execute the process described in #INSTRUCTIONS# and minimize the execution time of creating this knowledge graph (KG) while maximizing the number of generated instances in the knowledge graph  (KG).
+#DATA#

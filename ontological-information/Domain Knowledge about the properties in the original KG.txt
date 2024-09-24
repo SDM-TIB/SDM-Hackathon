@@ -21,9 +21,9 @@ with metadata describing their human-understandable label (`rdfs:label`), human-
 
 4. Property: `lungCancerE:hasAgeCategory`
    - `rdfs:label`: "age"
-   - `rdfs:comment`: "The age of lung cancer patients, classified as 'Young' (<= 60 years) or 'Old' (> 60 years)."
+   - `rdfs:comment`: "The age of lung cancer patients is a categorical value, classified as 'Young' (<= 60 years) or 'Old' (> 60 years)."
    - `rdfs:domain`: `Patient`
-   - `rdfs:range`: `xsd:integer`
+   - `rdfs:range`: `xsd:string`
 
 5. Property: `lungCancerE:hasRelapseProgression`
    - `rdfs:label`: "Relapse or Progression status"
