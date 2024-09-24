@@ -24,9 +24,13 @@ def call(prompt):
     }
 
     # Prepare the data payload
+
+    # model 'o1-mini' 65k output
+    # model 'gpt-4o-2024-08-06' 16k but supports structured output
+
     data = {
-        "model": "gpt-4",
-        "temperature": 0,
+        "model": "o1-mini",
+        #"temperature": 0,
         "messages": [
             {"role": "user", "content": prompt },
         ]
