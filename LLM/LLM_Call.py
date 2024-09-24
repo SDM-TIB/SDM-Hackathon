@@ -55,20 +55,29 @@ def call(prompt):
     except Exception as err:
         raise RuntimeError(f"An error occurred: {err}")
 
+
 # Example usage
 if __name__ == "__main__":
-    # Check if prompt and data file path are provided as command-line arguments
+    # Check if both the prompt file and data file path are provided as command-line arguments
     if len(sys.argv) < 3:
-        print("Usage: python LLM_Call.py <prompt> <data_file_path>")
+        print("Usage: python LLM_Call.py <prompt_file> <data_file_path>")
         sys.exit(1)
 
-    user_prompt = sys.argv[1]  # Get the prompt from the first argument
+    prompt_file_path = sys.argv[1]  # Get the prompt file path from the first argument
     data_file_path = sys.argv[2]  # Get the data file path from the second argument
+
+    # Read the prompt file content
+    try:
+        with open(prompt_file_path, 'r', encoding='utf-8') as prompt_file:
+            user_prompt = prompt_file.read()
+    except Exception as e:
+        print(f"Error reading prompt file: {e}")
+        sys.exit(1)
 
     # Read the data file content
     try:
-        with open(data_file_path, 'r', encoding='utf-8') as file:
-            data_content = file.read()
+        with open(data_file_path, 'r', encoding='utf-8') as data_file:
+            data_content = data_file.read()
     except Exception as e:
         print(f"Error reading data file: {e}")
         sys.exit(1)
@@ -76,8 +85,10 @@ if __name__ == "__main__":
     # Combine the prompt and data content with '#DATA#' separator
     combined_prompt = f"{user_prompt} #DATA# {data_content}"
 
+    # Call the API and print the response
     try:
         reply = call(combined_prompt)
+        print("\nAssistant's response:")
         print(reply)
     except Exception as e:
         print(str(e))
