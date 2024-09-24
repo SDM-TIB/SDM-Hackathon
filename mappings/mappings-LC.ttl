@@ -79,7 +79,7 @@
 <Biomarker_Positive>
   a rr:TriplesMap;
   rml:logicalSource [
-    rml:source "../datasets/Biomaker_Positive.csv" ;
+    rml:source "../datasets/Biomarker_Positive.csv" ;
     rml:referenceFormulation ql:CSV
   ];
   rr:subjectMap [
@@ -95,7 +95,7 @@
 <Biomarker_Negative>
   a rr:TriplesMap;
   rml:logicalSource [
-    rml:source "../datasets/Biomaker_Negative.csv" ;
+    rml:source "../datasets/Biomarker_Negative.csv" ;
     rml:referenceFormulation ql:CSV
   ];
   rr:subjectMap [
