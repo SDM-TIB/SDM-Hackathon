@@ -88,7 +88,6 @@ if __name__ == "__main__":
     # Call the API and print the response
     try:
         reply = call(combined_prompt)
-        print("\nAssistant's response:")
         print(reply)
     except Exception as e:
         print(str(e))
