@@ -10,7 +10,7 @@ where QUESTION is a natural language expression representing a question against 
 
 # Examples of questions and their corresponding generated SPARQL queries
 
-QUESTION 1: "What are the resources that include word "metadata" in the description of the resource?"
+QUESTION 1: "What are the datasets that contain the keyword "cancer" in the description of the datasets?"
 
 QUESTION 2: "What is the  frequency of the datasets per data formats?"
 
